@@ -1,4 +1,4 @@
-import React, { Component } from "react";
+/*import React, { Component } from "react";
 import { nanoid } from "nanoid";
 import pcss from "../phonebook/phonebook.module.css"
 
@@ -112,4 +112,98 @@ class inputForm extends Component {
   }
 }
 
-export default inputForm;
+export default inputForm;*/
+
+
+import React, { Component } from "react";
+import { nanoid } from "nanoid";
+import pcss from "../phonebook/phonebook.module.css";
+import ContactForm from "../contform/form";
+import Filter from "../filter/filter";
+import ContactList from "../contlist/list";
+
+class Phonebook extends Component {
+  state = {
+    contacts: [],
+    filter: "",
+    name: "",
+    number: ""
+  };
+
+  handleInputChange = (event) => {
+    const { name, value } = event.target;
+    this.setState({ [name]: value });
+  };
+
+  handleAddContact = (event) => {
+    event.preventDefault();
+    const { name, number, contacts } = this.state;
+
+    const errorContact = contacts.find((contact) => contact.name === name);
+
+    if (errorContact) {
+      alert(`${name} is already in contacts`);
+      return;
+    }
+
+    const newContact = {
+      id: nanoid(),
+      name,
+      number
+    };
+
+    this.setState((prevState) => ({
+      contacts: [...prevState.contacts, newContact],
+      name: "",
+      number: ""
+    }));
+  };
+
+  handleDeleteContact = (contactId) => {
+    this.setState((prevState) => ({
+      contacts: prevState.contacts.filter((contact) => contact.id !== contactId)
+    }));
+  };
+
+  handleFilterChange = (event) => {
+    const { value } = event.target;
+    this.setState({ filter: value });
+  };
+
+  render() {
+    const { contacts, filter, name, number } = this.state;
+
+    const filteredContacts = contacts.filter((contact) =>
+      contact.name.toLowerCase().includes(filter.toLowerCase())
+    );
+
+    return (
+      <div className={pcss.cont}>
+        <h2 className={pcss.ptitle}>Phonebook</h2>
+
+        <ContactForm
+          name={name}
+          number={number}
+          onInputChange={this.handleInputChange}
+          onAddContact={this.handleAddContact}
+        />
+
+        <div className={pcss.ccont}>
+          <h2 className={pcss.ctitle}>Contacts</h2>
+
+          <Filter
+            filter={filter}
+            onFilterChange={this.handleFilterChange}
+          />
+
+          <ContactList
+            contacts={filteredContacts}
+            onDeleteContact={this.handleDeleteContact}
+          />
+        </div>
+      </div>
+    );
+  }
+}
+
+export default Phonebook;

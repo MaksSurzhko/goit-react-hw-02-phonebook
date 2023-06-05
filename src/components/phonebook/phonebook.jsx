@@ -115,7 +115,7 @@ class inputForm extends Component {
 export default inputForm;*/
 
 
-import React, { Component } from "react";
+/*import React, { Component } from "react";
 import { nanoid } from "nanoid";
 import pcss from "../phonebook/phonebook.module.css";
 import ContactForm from "../contform/form";
@@ -206,4 +206,4 @@ class Phonebook extends Component {
   }
 }
 
-export default Phonebook;
+export default Phonebook;*/
